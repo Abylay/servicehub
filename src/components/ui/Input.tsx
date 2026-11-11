@@ -9,7 +9,7 @@ import {
 import { useTheme } from "@/theme";
 import {useState} from "react";
 
-type InputProps = Omit<TextInputProps, "style"> & {
+type InputProps = TextInputProps & {
     label?: string;
     error?: string;
 };
@@ -38,6 +38,7 @@ export function Input({
         input: {
             minHeight: 52,
             paddingHorizontal: theme.spacing.lg,
+            paddingLeft: 44,
             borderWidth: 1,
             borderRadius: theme.radius.md,
             borderColor: error
