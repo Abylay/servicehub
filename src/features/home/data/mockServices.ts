@@ -2,6 +2,7 @@ import type {ImageSourcePropType} from "react-native";
 
 export type Service = {
     id: string;
+    providerId: string;
     title: string;
     category: string;
     provider: string;
@@ -15,6 +16,7 @@ export type Service = {
 export const mockServices: Service[] = [
     {
         id: "service-1",
+        providerId: "provider-1",
         title: "Professional Haircut",
         category: "beauty",
         provider: "Alex Morgan",
@@ -26,6 +28,7 @@ export const mockServices: Service[] = [
     },
     {
         id: "service-2",
+        providerId: "provider-2",
         title: "Personal Training",
         category: "fitness",
         provider: "Sarah Wilson",
@@ -37,6 +40,7 @@ export const mockServices: Service[] = [
     },
     {
         id: "service-3",
+        providerId: "provider-3",
         title: "Car Detailing",
         category: "auto",
         provider: "Michael Brown",
@@ -48,6 +52,7 @@ export const mockServices: Service[] = [
     },
     {
         id: "service-4",
+        providerId: "provider-4",
         title: "Home Cleaning",
         category: "home",
         provider: "Emma Davis",
@@ -59,6 +64,7 @@ export const mockServices: Service[] = [
     },
     {
         id: "service-5",
+        providerId: "provider-5",
         title: "English Tutoring",
         category: "education",
         provider: "James Wilson",
@@ -70,6 +76,7 @@ export const mockServices: Service[] = [
     },
     {
         id: "service-6",
+        providerId: "provider-6",
         title: "Logo Design",
         category: "creative",
         provider: "Olivia Taylor",
