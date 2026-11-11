@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/theme";
 import { Card } from "@/components/ui/Card";
 import type { Service } from "../data/mockServices";
+import { router } from "expo-router";
 
 type ServiceCardProps = {
     service: Service;
@@ -98,7 +99,15 @@ export function ServiceCard({ service, isFavorite, onToggleFavorite }: ServiceCa
                 <View style={styles.info}>
                     <Text style={styles.title}>{service.title}</Text>
 
-                    <Text style={styles.provider}>by {service.provider}</Text>
+                    <Pressable
+                        onPress={() => router.push(`/provider/${service.providerId}`)}
+                        accessibilityRole={"button"}
+                        accessibilityLabel={`View ${service.provider}'s profile`}
+                    >
+                        <Text style={styles.provider}>
+                            by {service.provider}
+                        </Text>
+                    </Pressable>
                 </View>
 
                 <View style={styles.details}>
