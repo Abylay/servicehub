@@ -15,10 +15,13 @@ import { useTheme } from "@/theme";
 import { Card } from "@/components/ui/Card";
 import { mockProviders } from "@/features/providers/data/mockProviders";
 import { mockServices } from "@/features/home/data/mockServices";
+import {useState} from "react";
 
 export default function ProviderScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const { theme } = useTheme();
+
+    const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
     // Find provider by ID
     const provider = mockProviders.find(
@@ -29,6 +32,18 @@ export default function ProviderScreen() {
     const providerServices = mockServices.filter(
         (item) => item.providerId === id
     );
+
+    const handleBookNow = () => {
+        if (!selectedServiceId) return;
+
+        router.push({
+            pathname: "/booking",
+            params: {
+                providerId: id,
+                serviceId: selectedServiceId,
+            }
+        });
+    }
 
     const styles = StyleSheet.create({
         container: {
@@ -283,28 +298,38 @@ export default function ProviderScreen() {
 
                     {providerServices.length > 0 ? (
                         providerServices.map((service) => (
-                            <Card key={service.id}>
-                                <View style={styles.serviceCard}>
-                                    <Image
-                                        source={service.image}
-                                        style={styles.serviceImage}
-                                        resizeMode="cover"
-                                    />
+                            <Card
+                                key={service.id}
+                                style={{
+                                    borderWidth: selectedServiceId === service.id ? 2 : 1,
+                                    borderColor: selectedServiceId === service.id ? theme.colors.primary : theme.colors.border
+                                }}
+                            >
+                                <Pressable
+                                    onPress={() => setSelectedServiceId(service.id)}
+                                >
+                                    <View style={styles.serviceCard}>
+                                        <Image
+                                            source={service.image}
+                                            style={styles.serviceImage}
+                                            resizeMode="cover"
+                                        />
 
-                                    <View style={styles.serviceInfo}>
-                                        <Text style={styles.serviceTitle}>
-                                            {service.title}
-                                        </Text>
+                                        <View style={styles.serviceInfo}>
+                                            <Text style={styles.serviceTitle}>
+                                                {service.title}
+                                            </Text>
 
-                                        <Text style={styles.serviceDetails}>
-                                            {service.duration} min
-                                        </Text>
+                                            <Text style={styles.serviceDetails}>
+                                                {service.duration} min
+                                            </Text>
 
-                                        <Text style={styles.price}>
-                                            ${service.price}
-                                        </Text>
+                                            <Text style={styles.price}>
+                                                ${service.price}
+                                            </Text>
+                                        </View>
                                     </View>
-                                </View>
+                                </Pressable>
                             </Card>
                         ))
                     ) : (
@@ -314,6 +339,40 @@ export default function ProviderScreen() {
                     )}
                 </View>
             </ScrollView>
+            <View
+                style={{
+                    padding: theme.spacing.lg,
+                    backgroundColor: theme.colors.surface,
+                    borderTopWidth: 1,
+                    borderTopColor: theme.colors.border,
+                }}
+            >
+                <Pressable
+                    onPress={handleBookNow}
+                    disabled={!selectedServiceId}
+                    style={{
+                        backgroundColor: selectedServiceId
+                            ? theme.colors.primary
+                            : theme.colors.elevated,
+                        padding: theme.spacing.lg,
+                        borderRadius: theme.spacing.md,
+                        alignItems: "center",
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: selectedServiceId
+                                ? "#FFFFFF"
+                                : theme.colors.textSecondary,
+                            fontWeight: 600,
+                        }}
+                    >
+                        {selectedServiceId
+                            ? `Book Now · $${providerServices.find((service) => service.id === selectedServiceId)?.price}`
+                            : "Select a service"}
+                    </Text>
+                </Pressable>
+            </View>
         </SafeAreaView>
     );
 }
