@@ -80,8 +80,3 @@ export const mockProviders: Provider[] = [
         completedJobs: 180,
     },
 ];
-
-const providers = mockProviders.find((item) => item.id === "provider-3");
-console.log(providers);
-const service = mockServices.filter((item) => item.providerId === "provider-3");
-console.log(service);
