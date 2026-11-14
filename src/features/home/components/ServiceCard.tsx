@@ -34,6 +34,7 @@ export function ServiceCard({ service, isFavorite, onToggleFavorite }: ServiceCa
         provider: {
             fontSize: theme.typography.fontSize.sm,
             color: theme.colors.textSecondary,
+            padding: theme.spacing.sm,
         },
         details: {
             flexDirection: "row",
@@ -77,55 +78,57 @@ export function ServiceCard({ service, isFavorite, onToggleFavorite }: ServiceCa
     return (
         <Card>
             <View style={styles.container}>
-                <Image
-                    source={service.image}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-
                 <Pressable
-                    style={styles.favoriteButton}
-                    onPress={() => onToggleFavorite(service.id)}
+                    onPress={() => router.push(`/provider/${service.providerId}`)}
                     accessibilityRole={"button"}
-                    accessibilityLabel={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                    accessibilityLabel={`View ${service.provider}'s profile`}
+                    style={styles.container}
                 >
-                    <Ionicons
-                        name={isFavorite ? "heart" : "heart-outline"}
-                        size={22}
-                        color={isFavorite ? theme.colors.error : theme.colors.textSecondary}
+                    <Image
+                        source={service.image}
+                        style={styles.image}
+                        resizeMode="cover"
                     />
-                </Pressable>
-
-                <View style={styles.info}>
-                    <Text style={styles.title}>{service.title}</Text>
 
                     <Pressable
-                        onPress={() => router.push(`/provider/${service.providerId}`)}
+                        style={styles.favoriteButton}
+                        onPress={() => onToggleFavorite(service.id)}
                         accessibilityRole={"button"}
-                        accessibilityLabel={`View ${service.provider}'s profile`}
+                        accessibilityLabel={isFavorite ? "Remove from favorites" : "Add to favorites"}
                     >
+                        <Ionicons
+                            name={isFavorite ? "heart" : "heart-outline"}
+                            size={22}
+                            color={isFavorite ? theme.colors.error : theme.colors.textSecondary}
+                        />
+                    </Pressable>
+
+                    <View style={styles.info}>
+                        <Text style={styles.title}>{service.title}</Text>
+
                         <Text style={styles.provider}>
                             by {service.provider}
                         </Text>
-                    </Pressable>
-                </View>
-
-                <View style={styles.details}>
-                    <View style={styles.rating}>
-                        <Ionicons
-                            name="star"
-                            size={16}
-                            color={theme.colors.warning}
-                        />
-                        <Text style={styles.ratingText}>{service.rating} ({service.reviewCount} reviews)</Text>
                     </View>
-                    <Text style={styles.price}>
-                        ${service.price}
+
+                    <View style={styles.details}>
+                        <View style={styles.rating}>
+                            <Ionicons
+                                name="star"
+                                size={16}
+                                color={theme.colors.warning}
+                            />
+                            <Text style={styles.ratingText}>{service.rating} ({service.reviewCount} reviews)</Text>
+                        </View>
+                        <Text style={styles.price}>
+                            ${service.price}
+                        </Text>
+                    </View>
+                    <Text style={styles.duration}>
+                        {service.duration} min
                     </Text>
-                </View>
-                <Text style={styles.duration}>
-                    {service.duration} min
-                </Text>
+
+                </Pressable>
             </View>
         </Card>
     );
