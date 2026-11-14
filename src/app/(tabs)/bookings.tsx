@@ -5,6 +5,7 @@ import {
     ScrollView,
     Pressable,
     Alert,
+    Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -154,6 +155,22 @@ export default function BookingsScreen() {
     };
 
     const handleCancelBooking = (bookingId: string) => {
+        const confirmCancellation = () => {
+            updateBookingStatus(bookingId, "cancelled");
+        };
+
+        if (Platform.OS === "web") {
+            const confirmed = window.confirm(
+                "Are you sure you want to cancel this booking?"
+            );
+
+            if (confirmed) {
+                confirmCancellation();
+            }
+
+            return;
+        }
+
         Alert.alert(
             "Cancel Booking",
             "Are you sure you want to cancel this booking?",
@@ -165,12 +182,10 @@ export default function BookingsScreen() {
                 {
                     text: "Cancel Booking",
                     style: "destructive",
-                    onPress: () => {
-                        updateBookingStatus(bookingId, "cancelled");
-                    }
-                }
+                    onPress: confirmCancellation,
+                },
             ]
-        )
+        );
     };
 
     return (
