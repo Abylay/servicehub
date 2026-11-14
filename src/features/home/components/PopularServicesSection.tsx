@@ -1,7 +1,8 @@
-import {View, Text, StyleSheet, Pressable} from "react-native";
+
+import { View, Text, StyleSheet, Pressable, useWindowDimensions } from "react-native";
 import { useTheme } from "@/theme";
 import { Service } from "@/features/home/data/mockServices";
-import {ServiceCard} from "@/features/home/components/ServiceCard";
+import { ServiceCard } from "@/features/home/components/ServiceCard";
 
 type PopularServicesSectionProps = {
     services: Service[];
@@ -12,12 +13,37 @@ type PopularServicesSectionProps = {
     onToggleFavorite: (serviceId: string) => void;
 };
 
-export const PopularServicesSection = ({ services, selectedCategory, search, onClearFilters, favoriteIds, onToggleFavorite }: PopularServicesSectionProps) => {
+export const PopularServicesSection = ({
+                                           services,
+                                           selectedCategory,
+                                           search,
+                                           onClearFilters,
+                                           favoriteIds,
+                                           onToggleFavorite,
+                                       }: PopularServicesSectionProps) => {
     const { theme } = useTheme();
+    const { width } = useWindowDimensions();
+
+    const isDesktop = width >= 1200;
+    const isTablet = width >= 768 && width < 1200;
+
+    const cardWidth = isDesktop
+        ? "31%"
+        : isTablet
+            ? "47%"
+            : "100%";
 
     const styles = StyleSheet.create({
         container: {
             gap: theme.spacing.lg,
+        },
+        grid: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: theme.spacing.lg,
+        },
+        cardWrapper: {
+            width: cardWidth,
         },
         title: {
             fontSize: theme.typography.fontSize.lg,
@@ -43,16 +69,18 @@ export const PopularServicesSection = ({ services, selectedCategory, search, onC
         <View style={styles.container}>
             <Text style={styles.title}>Popular Services</Text>
 
-
             {services.length > 0 ? (
-                services.map((service) => (
-                    <ServiceCard
-                        key={service.id}
-                        service={service}
-                        isFavorite={favoriteIds.includes(service.id)}
-                        onToggleFavorite={onToggleFavorite}
-                    />
-                ))
+                <View style={styles.grid}>
+                    {services.map((service) => (
+                        <View key={service.id} style={styles.cardWrapper}>
+                            <ServiceCard
+                                service={service}
+                                isFavorite={favoriteIds.includes(service.id)}
+                                onToggleFavorite={onToggleFavorite}
+                            />
+                        </View>
+                    ))}
+                </View>
             ) : (
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>
@@ -70,7 +98,6 @@ export const PopularServicesSection = ({ services, selectedCategory, search, onC
                     </Pressable>
                 </View>
             )}
-
         </View>
     );
-}
+};

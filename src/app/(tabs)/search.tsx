@@ -7,6 +7,7 @@ import {
     ScrollView,
     Pressable,
     TextInput,
+    useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -52,6 +53,18 @@ const categories = [
 
 export default function SearchScreen() {
     const { theme } = useTheme();
+
+    const { width } = useWindowDimensions();
+
+    const isDesktop = width >= 1200;
+    const isTablet = width >= 768 && width < 1200;
+
+    const cardWidth = isDesktop
+        ? "31%"
+        : isTablet
+            ? "47%"
+            : "100%";
+
     const { favoriteIds, toggleFavorite } = useFavorites();
 
     const [search, setSearch] = useState("");
@@ -323,14 +336,18 @@ export default function SearchScreen() {
 
                 {/* Services */}
                 {sortedServices.length > 0 ? (
-                    <View style={styles.servicesList}>
+                    <View style={styles.servicesGrid}>
                         {sortedServices.map((service) => (
-                            <ServiceCard
+                            <View
                                 key={service.id}
-                                service={service}
-                                isFavorite={favoriteIds.includes(service.id)}
-                                onToggleFavorite={toggleFavorite}
-                            />
+                                style={{ width: cardWidth }}
+                            >
+                                <ServiceCard
+                                    service={service}
+                                    isFavorite={favoriteIds.includes(service.id)}
+                                    onToggleFavorite={toggleFavorite}
+                                />
+                            </View>
                         ))}
                     </View>
                 ) : (
@@ -688,7 +705,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "600",
     },
-    servicesList: {
+    servicesGrid: {
+        flexDirection: "row",
+        flexWrap: "wrap",
         gap: 16,
     },
     emptyContainer: {
